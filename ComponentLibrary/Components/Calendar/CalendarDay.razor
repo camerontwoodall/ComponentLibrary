@@ -1,0 +1,26 @@
+﻿@typeparam T
+@inherits ViewModels.CalendarDayViewModel<T>
+@using Models
+
+<div class="dropzone calendar-day @DropClass" ondragover="event.preventDefault();"
+     @ondrop="HandleDrop"
+     @ondragenter="HandleDragEnter"
+     @ondragleave="HandleDragLeave">
+    <div>
+        <span style="font-size:13px;">
+            @CurrentDate.Date.ToString("MM/dd")
+        </span>
+    </div>
+    @{
+        var items = Calendar.DataSource.Where(x => x.Date.ToString("MM/dd") == CurrentDate.Date.ToString("MM/dd"));
+        if (items.Any())
+        {
+            foreach (var i in items)
+            {
+                <div class="draggable" draggable="true" @ondragstart="@(() => HandleDragStart(i))">
+                    @DataTemplate(i)
+                </div>
+            }
+        }
+    }
+</div>

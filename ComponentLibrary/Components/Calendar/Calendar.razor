@@ -1,0 +1,70 @@
+﻿@typeparam T
+@inherits ViewModels.CalendarViewModel<T>
+@using Models
+
+<button>@Months[SelectedMonth] @SelectedYear</button>
+<button @onclick="@(e => UpdateMonth(e, -1))"><span class="oi oi-chevron-top" aria-hidden="true"></span></button>
+<button @onclick="@(e => UpdateMonth(e, 1))"><span class="oi oi-chevron-bottom" aria-hidden="true"></span></button>
+<CascadingValue Value="this">
+    <table class="calendar-table">
+        <thead>
+            <tr>
+                <th>Sunday</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+            </tr>
+        </thead>
+        @for (var rowCounter = 0; rowCounter < 6; rowCounter++)
+        {
+            <tr>
+                @for (var colCounter = 0; colCounter < 7; colCounter++)
+                {
+                    var currentDate = Dates[(rowCounter * 7) + colCounter];
+                    <td>
+                        <CascadingValue Value="@DataTemplate">
+                            <CalendarDay CurrentDate="@currentDate"></CalendarDay>
+                        </CascadingValue>
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+</CascadingValue>
+<style>
+    .calendar-table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+        .calendar-table > thead > tr > th, .calendar-table > tr > td {
+            border: 1px solid #eee;
+        }
+
+    .calendar-day {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        grid-auto-flow: row;
+    }
+
+    .can-drop {
+        border: 1px dashed green;
+    }
+
+    .draggable {
+        cursor: grab;
+        color: #ffffff;
+    }
+
+        .draggable:active {
+            cursor: grabbing;
+        }
+
+    .dragging {
+        cursor: grabbing;
+    }
+</style>
